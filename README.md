@@ -28,7 +28,7 @@ public class Main {
 
         CustomSocketFactory factory = new CustomSocketFactory(props);
         try {
-            Socket socket = factory.createSocket("example.com", 80);
+            Socket socket = factory.createSocket();
             System.out.println("Socket created with Keep-Alive settings.");
         } catch (Exception e) {
             e.printStackTrace();

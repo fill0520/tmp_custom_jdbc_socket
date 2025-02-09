@@ -8,8 +8,13 @@ import javax.net.SocketFactory;
 import jdk.net.ExtendedSocketOptions;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class CustomSocketFactory extends SocketFactory {
+
+    public static final List<Socket> sockets = new ArrayList<>();
 
     private static final Map<String, Integer[]> PROPERTY_LIMITS = Map.of(
         "keepAliveIdle", new Integer[]{1, 32767},
@@ -77,6 +82,7 @@ public class CustomSocketFactory extends SocketFactory {
     public Socket createSocket() throws IOException {
         Socket socket = new Socket();
         configureSocket(socket);
+        sockets.add(socket);
         return socket;
     }
 
@@ -85,6 +91,7 @@ public class CustomSocketFactory extends SocketFactory {
         Socket socket = new Socket();
         configureSocket(socket);
         socket.connect(new InetSocketAddress(host, port));
+        sockets.add(socket);
         return socket;
     }
 
@@ -94,6 +101,7 @@ public class CustomSocketFactory extends SocketFactory {
         configureSocket(socket);
         socket.bind(new InetSocketAddress(localHost, localPort));
         socket.connect(new InetSocketAddress(host, port));
+        sockets.add(socket);
         return socket;
     }
 
@@ -102,6 +110,7 @@ public class CustomSocketFactory extends SocketFactory {
         Socket socket = new Socket();
         configureSocket(socket);
         socket.connect(new InetSocketAddress(host, port));
+        sockets.add(socket);
         return socket;
     }
 
@@ -111,6 +120,7 @@ public class CustomSocketFactory extends SocketFactory {
         configureSocket(socket);
         socket.bind(new InetSocketAddress(localAddress, localPort));
         socket.connect(new InetSocketAddress(address, port));
+        sockets.add(socket);
         return socket;
     }
 
@@ -134,5 +144,9 @@ public class CustomSocketFactory extends SocketFactory {
                 }
             }
         }
+    }
+
+    public static List<Socket> getSockets() {
+            return sockets;
     }
 }
